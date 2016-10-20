@@ -1,14 +1,10 @@
 /**
- *  Create a Canvas as ImageOverlay to draw the Lat/Lon Graticule,
- *  and show the axis tick label on the edge of the map.
- *  Author: lanwei@cloudybay.com.tw
- */
+*  Create a Canvas as ImageOverlay to draw the Lat/Lon Graticule,
+*  and show the axis tick label on the edge of the map.
+*  Author: lanwei@cloudybay.com.tw
+*/
 
-(function (window, document, undefined) {
-
-L.LatLngGraticule = L.Class.extend({
-    includes: L.Mixin.Events,
-
+L.LatLngGraticule = L.Layer.extend({
     options: {
         showLabel: true,
         opacity: 1,
@@ -74,9 +70,9 @@ L.LatLngGraticule = L.Class.extend({
         map.on('move', this._reset, this);
         map.on('moveend', this._reset, this);
 
-        if (map.options.zoomAnimation && L.Browser.any3d) {
-            map.on('zoomanim', this._animateZoom, this);
-        }
+// 		if (map.options.zoomAnimation && L.Browser.any3d) {
+// 			map.on('zoom', this._animateZoom, this);
+// 		}
 
         this._reset();
     },
@@ -88,9 +84,9 @@ L.LatLngGraticule = L.Class.extend({
         map.off('move', this._reset, this);
         map.off('moveend', this._reset, this);
 
-        if (map.options.zoomAnimation) {
-            map.off('zoomanim', this._animateZoom, this);
-        }
+// 		if (map.options.zoomAnimation) {
+// 			map.off('zoom', this._animateZoom, this);
+// 		}
     },
 
     addTo: function (map) {
@@ -145,21 +141,22 @@ L.LatLngGraticule = L.Class.extend({
         });
     },
 
-    _animateZoom: function (e) {
-        var map = this._map,
-            container = this._container,
-            canvas = this._canvas,
-            scale = map.getZoomScale(e.zoom),
-            nw = map.containerPointToLatLng([0, 0]),
-            se = map.containerPointToLatLng([canvas.width, canvas.height]),
-
-            topLeft = map._latLngToNewLayerPoint(nw, e.zoom, e.center),
-            size = map._latLngToNewLayerPoint(se, e.zoom, e.center)._subtract(topLeft),
-            origin = topLeft._add(size._multiplyBy((1 / 2) * (1 - 1 / scale)));
-
-        container.style[L.DomUtil.TRANSFORM] =
-                L.DomUtil.getTranslateString(origin) + ' scale(' + scale + ') ';
-    },
+// 	_animateZoom: function (e) {
+// 		var map = this._map,
+// 			container = this._container,
+// 			canvas = this._canvas,
+// 			zoom = map.getZoom(),
+// 			center = map.getCenter(),
+// 			scale = map.getZoomScale(zoom),
+// 			nw = map.containerPointToLatLng([0, 0]),
+// 			se = map.containerPointToLatLng([canvas.width, canvas.height]),
+//
+// 			topLeft = map._latLngToNewLayerPoint(nw, zoom, center),
+// 			size = map._latLngToNewLayerPoint(se, zoom, center)._subtract(topLeft),
+// 			origin = topLeft._add(size._multiplyBy((1 / 2) * (1 - 1 / scale)));
+//
+// 		L.DomUtil.setTransform(container, origin, scale);
+// 	},
 
     _reset: function () {
         var container = this._container,
@@ -519,6 +516,3 @@ L.LatLngGraticule = L.Class.extend({
 L.latlngGraticule = function (options) {
     return new L.LatLngGraticule(options);
 };
-
-
-}(this, document));

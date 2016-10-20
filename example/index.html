@@ -6,9 +6,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-	<!-- Leaflet style. REQUIRED! -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+<link href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
+<script src="https://unpkg.com/leaflet@1.0.0/dist/leaflet-src.js"></script>
+
+<script src="../Leaflet.Graticule.js"></script>
 
 	<style>
 		html { height: 100%; }
@@ -19,32 +20,26 @@
 <body>
 	<div id="map" class="map"></div>
 
-    <div>
-    </div>
-
-
-    <script src="../leaflet.latlng-graticule.js"></script>
+	<div>
+	</div>
 
 	<script>
-		//var _base_tile_url = 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-        var _base_tile_url = 'http://{s}.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png',
-            map = new L.Map('map',{zoomControl:false}).setView([24.0, 121], 6);
-        var baselayer = L.tileLayer(_base_tile_url, {
-            unloadInvisibleTiles: false
-        });
-        map.addLayer(baselayer);
+		var map = new L.Map('map',{zoomControl:false}).setView([24.0, 121], 6),
 
-        L.latlngGraticule({
-            showLabel: true,
-            zoomInterval: [
-                {start: 2, end: 3, interval: 30},
-                {start: 4, end: 4, interval: 10},
-                {start: 5, end: 7, interval: 5},
-                {start: 8, end: 10, interval: 1}
-            ]
-        }).addTo(map);
+			stamenTerrain = L.tileLayer('http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.png').addTo(map);
 
-        console.log(map.options.crs);
+		L.latlngGraticule({
+			showLabel: true,
+			color: '#222',
+			zoomInterval: [
+				{start: 2, end: 3, interval: 30},
+				{start: 4, end: 4, interval: 10},
+				{start: 5, end: 7, interval: 5},
+				{start: 8, end: 10, interval: 1}
+			]
+		}).addTo(map);
+
+// 		console.log(map.options.crs);
 
 	</script>
 
